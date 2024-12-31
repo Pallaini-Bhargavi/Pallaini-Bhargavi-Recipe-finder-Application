@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            background-image: url("https://img.lovepik.com/photo/48014/8703.jpg_wh860.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        #main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #000000;
+            text-decoration: underline;
+        }
+        
+        #recipe-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 50px;
+            justify-items: center;
+        }
+        
+        .recipe-card {
+            background-color: #fff;
+            padding: 15px;
+            width: 220px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .recipe-card h5 {
+            color: #333;
+        }
+        
+        .recipe-card button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #f50000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        
+        }
+        
+        .recipe-card button:hover {
+            background-color: #ff5c5c;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            z-index: 1000;
+        }
+        
+        #modal h3 {
+            margin-top: 0;
+            color:green;
+            text-decoration: underline;
+        }
+        
+        #modal ul {
+            padding-left: 20px;
+        }
+        
+        #modal ul li {
+            margin-bottom: 5px;
+        }
+        
+        #modal button {
+            background-color: #f90000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #modal button:hover {
+            background-color: #ff5c5c;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main">
+    <h2>RECIPE FINDER</h2>
+    <div id="recipe-container">
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrJvhh_Dizh4_rCpxbc6b8Am-YTBMbeNPXog&s">
+            <h5>Moong Dal Chilla</h5>
+            <button onclick="showRecipe(
+                'Moong Dal Chilla', 
+                ['Moong Dal', 'Spices', 'Oil'], 
+                [
+                    'Soak moong dal for 4-5 hours and grind to a paste.',
+                    'Add spices to the batter.',
+                    'Heat a pan, pour batter, and cook on both sides.',
+                    'Serve with chutney.'
+                ])">Show Recipe</button>
+        </div>
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMaF9ozvJGCOCf975dO2ov08VbfkwpJohw_w&s">
+            <h5>Sprouts Salad</h5>
+            <button onclick="showRecipe(
+                'Sprouts Salad', 
+                ['Sprouted Beans', 'Vegetables', 'Dressing'], 
+                [
+                    'Mix sprouted beans with chopped vegetables.',
+                    'Prepare a tangy dressing.',
+                    'Toss the salad with the dressing and serve.'
+                ])">Show Recipe</button>
+        </div>
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkCR9EL0SyxLrdoiazucwvn8P0wuw15kft6g&s" alt="Vegetable Poha">
+            <h5>Vegetable Poha</h5>
+            <button onclick="showRecipe(
+                'Vegetable Poha', 
+                ['Poha', 'Vegetables', 'Spices', 'Oil'], 
+                [
+                    'Rinse poha and set aside.',
+                    'Heat oil, sauté vegetables.',
+                    'Add poha, spices, and cook for a few minutes.',
+                    'Serve hot.'
+                ], 
+                'vegetablepoha.jpg'
+            )">Show Recipe</button>
+        </div>
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeWY7E8nBXsSucTHZ5oVYLcPm9WfosKoDKkQ&s" alt="Mixed Vegetable Soup">
+            <h5>Mixed Vegetable Soup</h5>
+            <button onclick="showRecipe(
+                'Mixed Vegetable Soup', 
+                ['Mixed Vegetables', 'Spices', 'Oil'], 
+                [
+                    'Chop vegetables and sauté in oil.',
+                    'Add water and bring to a boil.',
+                    'Simmer until vegetables are soft.',
+                    'Blend the soup and serve hot.'
+                ], 
+                'mixed-vegetable-soup.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZxiHtDYkiTjgnaQ_BnUs47z-Rl_n-6N2-Fw&s" alt="Cucumber Raita">
+            <h5>Cucumber Raita</h5>
+            <button onclick="showRecipe(
+                'Cucumber Raita', 
+                ['Cucumber', 'Yogurt', 'Spices'], 
+                [
+                    'Grate cucumber and mix with yogurt.',
+                    'Add spices to taste.',
+                    'Chill before serving.'
+                ], 
+                'cucumber-raita.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzSMgL1_AKHpvmDX0HNsCPzaplBGrTmPK0iA&s" alt="Khichdi">
+            <h5>Khichdi</h5>
+            <button onclick="showRecipe(
+                'Khichdi', 
+                ['Rice', 'Lentils', 'Spices', 'Ghee'], 
+                [
+                    'Cook rice and lentils with spices.',
+                    'Add ghee for richness.',
+                    'Serve hot with yogurt or pickle.'
+                ], 
+                'khichdi.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-VVGFWrWfBFyC2ziyspgVBIJV9wjr5tk6AA&s" alt="Oats Idli">
+            <h5>Oats Idli</h5>
+            <button onclick="showRecipe(
+                'Oats Idli', 
+                ['Oats', 'Semolina', 'Yogurt', 'Spices'], 
+                [
+                    'Grind oats and mix with semolina and yogurt.',
+                    'Add spices and prepare the batter.',
+                    'Steam the batter to make idlis.'
+                ], 
+                'oats-idli.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvN49WFYVpNM_E1QBLvavum-YjqSKM40cCYQ&s" alt="Sambar Rice">
+            <h5>Sambar Rice</h5>
+            <button onclick="showRecipe(
+                'Sambar Rice', 
+                ['Rice', 'Lentils', 'Sambar Masala', 'Vegetables'], 
+                [
+                    'Cook rice and lentils.',
+                    'Prepare sambar with vegetables.',
+                    'Mix rice and sambar, cook for a few minutes.'
+                ], 
+                'sambar-rice.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM6slnk_UQHgA9wuuW4IFPL6OXPS45rzfmrw&s" alt="Chana Salad">
+            <h5>Chana Salad</h5>
+            <button onclick="showRecipe(
+                'Chana Salad', 
+                ['Chickpeas', 'Vegetables', 'Lemon', 'Spices'], 
+                [
+                    'Boil chickpeas and mix with chopped vegetables.',
+                    'Add lemon juice and spices.',
+                    'Toss and serve chilled.'
+                ], 
+                'chana-salad.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxUeF3zMAdxwkBRtYQlq3_v_Cq5aXxvStxnA&s" alt="Palak Soup">
+            <h5>Palak Soup</h5>
+            <button onclick="showRecipe(
+                'Palak Soup', 
+                ['Spinach', 'Onion', 'Garlic', 'Spices'], 
+                [
+                    'Cook spinach with onions and garlic.',
+                    'Add spices and water, boil.',
+                    'Blend to make a smooth soup and serve hot.'
+                ], 
+                'palak-soup.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI2nusPVYfAU1Ekj-1nTXh81K-yIykZIJZXQ&s" alt="Steamed Dhokla">
+            <h5>Steamed Dhokla</h5>
+            <button onclick="showRecipe(
+                'Steamed Dhokla', 
+                ['Chickpea Flour', 'Yogurt', 'Spices', 'Mustard Seeds'], 
+                [
+                    'Prepare batter with chickpea flour and yogurt.',
+                    'Steam the batter in a greased pan.',
+                    'Garnish with mustard seeds and serve.'
+                ], 
+                'steamed-dhokla.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD01uJ7v0g5acDZnOGg-8iVzn6RzUsVKnHCw&s" alt="Vegetable Pulao">
+            <h5>Vegetable Pulao</h5>
+            <button onclick="showRecipe(
+                'Vegetable Pulao', 
+                ['Rice', 'Vegetables', 'Spices', 'Oil'], 
+                [
+                    'Sauté vegetables and spices in oil.',
+                    'Add rice and water, cook till done.',
+                    'Serve hot with raita.'
+                ], 
+                'vegetable-pulao.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNdonCmAjlikwTtPBVhl-p1ODryq0ppDvZBw&s" alt="Mushroom Pulao">
+            <h5>Mushroom Pulao</h5>
+            <button onclick="showRecipe(
+                'Mushroom Pulao', 
+                ['Rice', 'Mushrooms', 'Spices', 'Oil'], 
+                [
+                    'Sauté mushrooms with spices.',
+                    'Add rice and water, cook till done.',
+                    'Serve with a side of yogurt or salad.'
+                ], 
+                'mushroom-pulao.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNQmP_6qmkuMMxarqeHUhyZZoNI2q8V1qSZw&s" alt="Curd Rice">
+            <h5>Curd Rice</h5>
+            <button onclick="showRecipe(
+                'Curd Rice', 
+                ['Rice', 'Yogurt', 'Curry Leaves', 'Mustard Seeds'], 
+                [
+                    'Mix cooked rice with yogurt.',
+                    'Temper mustard seeds and curry leaves.',
+                    'Pour over the rice and serve.'
+                ], 
+                'curd-rice.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7dX_aa-tXL4b8FUWC07vbkFC4r2B_P_XZJQ&s" alt="Tomato Rice">
+            <h5>Tomato Rice</h5>
+            <button onclick="showRecipe(
+                'Tomato Rice', 
+                ['Rice', 'Tomatoes', 'Spices', 'Oil'], 
+                [
+                    'Cook rice and set aside.',
+                    'Prepare a tangy tomato curry with spices.',
+                    'Mix rice and curry, cook for a few minutes.'
+                ], 
+                'tomato-rice.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNk32Bl94jwTqLAzXAKR-GudPXxyMdME2tkQ&s" alt="Coconut Rice">
+            <h5>Coconut Rice</h5>
+            <button onclick="showRecipe(
+                'Coconut Rice', 
+                ['Rice', 'Coconut', 'Spices', 'Oil'], 
+                [
+                    'Cook rice and set aside.',
+                    'Grate fresh coconut and temper with spices.',
+                    'Mix coconut with rice and serve.'
+                ], 
+                'coconut-rice.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk6eyreQhKcqw4jZLc-0VhdT51ipCwSwCxNQ&s" alt="Masala Rice">
+            <h5>Masala Rice</h5>
+            <button onclick="showRecipe(
+                'Masala Rice', 
+                ['Rice', 'Spices', 'Vegetables', 'Oil'], 
+                [
+                    'Cook rice and set aside.',
+                    'Prepare a spicy vegetable masala.',
+                    'Mix masala with rice and serve.'
+                ], 
+                'masala-rice.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+        <div class="recipe-card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxAnChQ3WbLN-I8KhQafrQF9McsGR-fr5VLQ&s" alt="Spinach Rice">
+            <h5>Spinach Rice</h5>
+            <button onclick="showRecipe(
+                'Spinach Rice', 
+                ['Rice', 'Spinach', 'Spices', 'Oil'], 
+                [
+                    'Cook rice and set aside.',
+                    'Sauté spinach with spices.',
+                    'Mix spinach with rice and serve.'
+                ], 
+                'spinach-rice.jpg'
+            )">Show Recipe</button>
+        </div>
+        
+    </div>
+</div>
+
+<div id="overlay"></div>
+
+<div id="modal">
+    <h3 id="modal-title"></h3>
+    <h4>Ingredients:</h4>
+    <ul id="modal-ingredients"></ul>
+    <h4>Steps:</h4>
+    <ul id="modal-steps"></ul>
+    <button onclick="closeModal()">Close</button>
+</div>
+
+<script>
+    function showRecipe(title, ingredients, steps) {
+        // Set the modal title
+        document.getElementById('modal-title').innerText = title;
+    
+        // Populate ingredients
+        const ingredientsList = document.getElementById('modal-ingredients');
+        ingredientsList.innerHTML = ''; // Clear previous content
+        ingredients.forEach(ingredient => {
+            const li = document.createElement('li');
+            li.innerText = ingredient;
+            ingredientsList.appendChild(li);
+        });
+    
+        // Populate steps
+        const stepsList = document.getElementById('modal-steps');
+        stepsList.innerHTML = ''; // Clear previous content
+        steps.forEach(step => {
+            const li = document.createElement('li');
+            li.innerText = step;
+            stepsList.appendChild(li);
+        });
+    
+        // Show the modal and overlay
+        document.getElementById('modal').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+    
+    function closeModal() {
+        // Hide the modal and overlay
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+</script>
+</body>
+</html>
